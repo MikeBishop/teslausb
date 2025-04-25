@@ -873,6 +873,11 @@ video {
         <span id="speedtext" style="padding-left:10px;"></span>
       </span>
       <p>
+        <div id="pairingdiv">
+          <button class="group2" id="pairKey" onclick="pairBLEkey();">Pair BLE with Car</button>
+          <span id="pairtext" style="padding-left:20px;"></span>
+        </div>
+      <p>
       <button class="group2" id="rebootbutton" onclick="rebootfunc(this);">Restart Raspberry Pi</button><span id="reboottext" style="padding-left:20px;"></span>
     </div>
   </div>
@@ -1405,6 +1410,59 @@ function setbuttonsdisabled(group, disabled) {
   }
 }
 
+function pairBLEkey() {
+  var msg=document.getElementById('pairtext');
+  msg.textContent="Pairing BLE with car. Tap keycard on center console to confirm.";
+  var button=document.getElementById('pairKey');
+  button.disabled=true;
+  button.textContent="Pairing...";
+  setbuttonsdisabled('group1', true);
+  setbuttonsdisabled('group2', true);
+  callcgi('cgi-bin/pairBLEkey.sh');
+  setTimeout(function() { waitforpairing(button, 0); }, 5000);
+}
+
+function waitforpairing(button, count) {
+  var request = new XMLHttpRequest();
+  request.open('GET', cachebustingurl('cgi-bin/checkBLEstatus.sh'));
+  request.setRequestHeader("Cache-Control", "no-cache, no-store, max-age=0");
+  request.onreadystatechange = function () {
+    log('readstatechange, state: ' + request.readyState + ', status: ' + request.status);
+    if (request.readyState === 4) {
+      if (request.status === 200) {
+        result = request.responseText;
+      } else {
+        log("unexpected pairing response");
+        window.setTimeout(function() { waitforpairing(button, count + 1); }, 5000);
+        return;
+      }
+
+      if (result.indexOf("<p>paired</p>") > 0) {
+        var msg=document.getElementById('pairtext');
+        msg.textContent="Successfully paired with car.";
+        button.disabled=false;
+        button.textContent="Pair BLE with Car";
+        setbuttonsdisabled('group1', false);
+        setbuttonsdisabled('group2', false);
+      } else {
+        if (count > 12) {
+          log("pairing failed");
+          var msg=document.getElementById('pairtext');
+          msg.textContent="Pairing failed. Please try again.";
+          button.disabled=false;
+          button.textContent="Pair BLE with Car";
+          setbuttonsdisabled('group1', false);
+          setbuttonsdisabled('group2', false);
+          return;
+        }
+        log("waiting for pairing");
+        window.setTimeout(function() { waitforpairing(button, count + 1); }, 5000);
+      }
+    }
+  }
+  request.send();
+}
+
 function restorerebootbutton(button) {
   button.disabled=false;
   button.textContent='Restart Raspberry Pi';
@@ -1660,8 +1718,13 @@ function readconfig() {
       const toolsbtn = document.querySelector("#tab4");
       toolsbtn.checked = true;
     }
-
-
+    const blebtn = document.getElementById("pairdiv");
+    if (config.uses_ble == "yes") {
+      blebtn.style.visibility = "visible";
+    }
+    else {
+      blebtn.style.visibility = "collapsed";
+    }
   }});
 }
 
