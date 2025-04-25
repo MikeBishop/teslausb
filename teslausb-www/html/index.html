@@ -1433,31 +1433,27 @@ function waitforpairing(button, count) {
         result = request.responseText;
       } else {
         log("unexpected pairing response");
+        result = "";
+      }
+
+      if (result.indexOf("<p>paired</p>") > 0) {
+        log("pairing succeeded");
+        var msg=document.getElementById('pairtext');
+        msg.textContent="Successfully paired with car.";
+      } else if (count > 12) {
+        log("pairing failed");
+        var msg=document.getElementById('pairtext');
+        msg.textContent="Pairing failed. Please try again.";
+      } else {
+        log("Still waiting for pairing");
         window.setTimeout(function() { waitforpairing(button, count + 1); }, 5000);
         return;
       }
 
-      if (result.indexOf("<p>paired</p>") > 0) {
-        var msg=document.getElementById('pairtext');
-        msg.textContent="Successfully paired with car.";
-        button.disabled=false;
-        button.textContent="Pair BLE with Car";
-        setbuttonsdisabled('group1', false);
-        setbuttonsdisabled('group2', false);
-      } else {
-        if (count > 12) {
-          log("pairing failed");
-          var msg=document.getElementById('pairtext');
-          msg.textContent="Pairing failed. Please try again.";
-          button.disabled=false;
-          button.textContent="Pair BLE with Car";
-          setbuttonsdisabled('group1', false);
-          setbuttonsdisabled('group2', false);
-          return;
-        }
-        log("waiting for pairing");
-        window.setTimeout(function() { waitforpairing(button, count + 1); }, 5000);
-      }
+      button.disabled = false;
+      button.textContent = "Pair BLE with Car";
+      setbuttonsdisabled('group1', false);
+      setbuttonsdisabled('group2', false);
     }
   }
   request.send();
