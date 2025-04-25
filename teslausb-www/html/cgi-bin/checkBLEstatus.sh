@@ -1,6 +1,8 @@
 #!/bin/bash
 
-if /root/bin/tesla-control -ble -vin $(cat /root/.ble/vin) session-info /root/.ble/key_private.pem infotainment
+VIN=$(grep "^${TESLA_BLE_VIN}=" /root/teslausb_setup_variables.conf | cut -d'=' -f2- | head -n 1)
+
+if /root/bin/tesla-control -ble -vin $VIN session-info /root/.ble/key_private.pem infotainment
 then
   "$(dirname "$0")/reload.sh" "paired"
 else
