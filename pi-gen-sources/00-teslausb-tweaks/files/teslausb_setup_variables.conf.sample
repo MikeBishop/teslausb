@@ -257,14 +257,15 @@ export CAM_SIZE=40G
 #
 # The most direct method is to use Tesla's new BLE interface to pair TeslaUSB as
 # a BLE key to your vehicle. This allows TeslaUSB to turn Sentry Mode on before
-# archiving and off afterwards. However, you should consider the security
-# implications; the keys generated and stored on TeslaUSB could be used to
-# unlock and drive your car if the device is stolen. Enabling PIN-to-Drive is
-# encouraged. If the device is stolen or compromised, immediately delete the key
-# from the car.
+# archiving and off afterwards.
+#
+# All methods of remotely controlling the car have security implications. The
+# keys and/or tokens stored on TeslaUSB could be used to unlock and drive your
+# car if the device is stolen. Enabling PIN-to-Drive is encouraged. If the
+# device is stolen or compromised, immediately delete the key from the car.
 #
 # Other ways to keep the USB ports powered for TeslaUSB to finish archiving
-# involves manually turning on Sentry Mode or Camp Mode from the Tesla App.
+# involve manually turning on Sentry Mode or Camp Mode from the Tesla App.
 # However, neither are great solutions as they keep the car on indefinitely,
 # thus unnecessarily consuming the car’s high-voltage battery. For that reason,
 # it’s a good idea to setup notification mechanisms (see preceding sections) so
@@ -273,6 +274,10 @@ export CAM_SIZE=40G
 # Another alternative is using a power bank or UPS hat to keep TeslaUSB powered
 # independent of the power state of the car's USB ports. See the TeslaUSB wiki
 # for more info.
+#
+# !!! IMPORTANT: Only ONE control API should be used at a time. Do not include
+#                API tokens for both TeslaFi and Tessie, or combine BLE with
+#                either service.
 #
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Tesla BLE setup: Provide the VIN of the vehicle to control here.
@@ -314,9 +319,6 @@ export CAM_SIZE=40G
 #export SENTRY_CASE=1
 #
 # Additional Tessie & TeslaFi Requirements:
-#
-# !!! IMPORTANT: Only ONE API should be used at a time.
-#                Do not include API tokens for both TeslaFi and Tessie.
 #
 # How to generate TeslaFi API Tokens:
 #   Log into your TeslaFi account.
