@@ -43,5 +43,5 @@ then
 elif [[ -n "${TESLA_BLE_VIN:+x}" ]]
 # Use Tesla BLE API to disable Sentry Mode
 then
-  /root/bin/tesla-control -key-file /root/.ble/key_private.pem -v "$TESLA_BLE_VIN" sentry_mode off
+  /root/bin/tesla-control -ble -key-file /root/.ble/key_private.pem -v "$TESLA_BLE_VIN" sentry-mode off
 fi
