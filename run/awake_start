@@ -4,6 +4,13 @@ if [[ ( -z "${TESLAFI_API_TOKEN:+x}" ) && ( -z "${TESSIE_API_TOKEN:+x}" ) && ( -
 then
   log "Not keeping car awake using Sentry Mode."
 else
+
+  if [[ -z "${SENTRY_CASE:+x}" && -n "${TESLA_BLE_VIN:+x}" ]]
+  then
+    # If unset, BLE can assume mode 2
+    SENTRY_CASE=2
+  fi
+
   case "${SENTRY_CASE}" in
     1)
       # Sentry Mode should already be enabled
