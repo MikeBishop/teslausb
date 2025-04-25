@@ -1720,10 +1720,10 @@ function readconfig() {
     }
     const blebtn = document.getElementById("pairdiv");
     if (config.uses_ble == "yes") {
-      blebtn.style.visibility = "visible";
+      blebtn.style.display = "block";
     }
     else {
-      blebtn.style.visibility = "collapsed";
+      blebtn.style.display = "none";
     }
   }});
 }
