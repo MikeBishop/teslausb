@@ -1,13 +1,13 @@
 #!/bin/bash -eu
 
-if [[ ( -z "${TESLAFI_API_TOKEN:+x}" ) && ( -z "${TESSIE_API_TOKEN:+x}" ) ]]
+if [[ ( -z "${TESLAFI_API_TOKEN:+x}" ) && ( -z "${TESSIE_API_TOKEN:+x}" ) && ( -z "${TESLA_BLE_VIN:+x}" ) ]]
 then
-  log "Not keeping car awake using Sentry Mode via TeslaFi or Tessie."
+  log "Not keeping car awake using Sentry Mode."
 else
   case "${SENTRY_CASE}" in
     1)
       # Sentry Mode should already be enabled
-      log "TeslaFi/Tessie: Skip sending command to enable Sentry Mode."
+      log "Skip sending command to enable Sentry Mode."
       ;;
     2)
       if [[ ( -n "${TESLAFI_API_TOKEN:+x}" ) ]]
@@ -15,9 +15,7 @@ else
       then
         curl -s -H "Authorization: Bearer $TESLAFI_API_TOKEN" "https://www.teslafi.com/feed.php?command=set_sentry_mode&sentryMode=true&noWake=true"
         log "TeslaFi: Command sent to enable Sentry Mode."
-      fi
-
-      if [[ -n "${TESSIE_API_TOKEN:+x}" ]]
+      elif [[ -n "${TESSIE_API_TOKEN:+x}" ]]
       # Use Tessie API to enable Sentry Mode
       then
         http_response=$(curl -s -w "%{http_code}" \
@@ -25,7 +23,7 @@ else
           -H "Accept: application/json" \
           -H "User-Agent: github.com/marcone/teslausb" \
           "https://api.tessie.com/$TESSIE_VIN/command/enable_sentry")
-              
+
         log "Tessie: Command sent to enable Sentry Mode."
         # Extract HTTP status code
         http_status="${http_response: -3}"
@@ -52,6 +50,10 @@ else
             fi
           fi
         fi
+      elif [[ -n "${TESLA_BLE_VIN:+x}" ]]
+      # Use Tesla BLE API to enable Sentry Mode
+      then
+        /root/bin/tesla-control -ble -key-file /root/.ble/key_private.pem -v "$TESLA_BLE_VIN" sentry_mode on
       fi
       ;;
     *)
