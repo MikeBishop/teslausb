@@ -262,7 +262,8 @@ export CAM_SIZE=40G
 # All methods of remotely controlling the car have security implications. The
 # keys and/or tokens stored on TeslaUSB could be used to unlock and drive your
 # car if the device is stolen. Enabling PIN-to-Drive is encouraged. If the
-# device is stolen or compromised, immediately delete the key from the car.
+# device is stolen or compromised, immediately delete the key from the car and
+# change associated passwords.
 #
 # Other ways to keep the USB ports powered for TeslaUSB to finish archiving
 # involve manually turning on Sentry Mode or Camp Mode from the Tesla App.
