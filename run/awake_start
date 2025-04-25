@@ -60,7 +60,12 @@ else
       elif [[ -n "${TESLA_BLE_VIN:+x}" ]]
       # Use Tesla BLE API to enable Sentry Mode
       then
-        /root/bin/tesla-control -ble -key-file /root/.ble/key_private.pem -v "$TESLA_BLE_VIN" sentry-mode on
+        if /root/bin/tesla-control -ble -key-file /root/.ble/key_private.pem -v "$TESLA_BLE_VIN" sentry-mode on
+        then
+          log "Tesla BLE: Command sent to enable Sentry Mode."
+        else
+          log "Tesla BLE: Failed to set Sentry Mode."
+        fi
       fi
       ;;
     *)
