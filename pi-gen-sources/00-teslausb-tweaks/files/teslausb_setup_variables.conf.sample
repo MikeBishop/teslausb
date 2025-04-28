@@ -289,7 +289,7 @@ export CAM_SIZE=40G
 #
 # To pair by command line, SSH into Tesla USB and run the following command:
 #
-# sudo /root/bin/tesla-control -ble -vin <your VIN> add-key-request /root/.ble/key_public.pem owner cloud_key
+# sudo /root/bin/tesla-control -ble -vin <your VIN> add-key-request /root/.ble/key_public.pem charging_manager cloud_key
 #
 # After initiating pairing, you will need to promptly tap an authorized keycard
 # on the center console in order to authorize the new key.
