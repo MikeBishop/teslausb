@@ -244,9 +244,7 @@ export CAM_SIZE=40G
 # !!!!!!!!!!!!!!!!!!!!!! IMPORTANT KEEP CAR AWAKE CHANGES !!!!!!!!!!!!!!!!!!!!!!
 #
 # Recent car firmware turns off USB ports shortly after you exit the car,
-# affecting the ability for TeslaUSB to finish archiving. 2025.14.1 adds an
-# option to keep accessory power on when the car is not asleep. You should
-# enable this.
+# affecting the ability for TeslaUSB to finish archiving.
 #
 # To keep the car from sleeping, several methods are supported. The unofficial
 # Tesla API is now deprecated in favor of the official Tesla Fleet API (a paid
@@ -274,7 +272,9 @@ export CAM_SIZE=40G
 #
 # Another alternative is using a power bank or UPS hat to keep TeslaUSB powered
 # independent of the power state of the car's USB ports. See the TeslaUSB wiki
-# for more info.
+# for more info. Finally, 2025.14.1 adds an option to keep 12V accessory power
+# on when the car is not asleep. Depending how your Pi is powered, this may be
+# sufficient.
 #
 # !!! IMPORTANT: Only ONE control API should be used at a time. Do not include
 #                API tokens for both TeslaFi and Tessie, or combine BLE with
