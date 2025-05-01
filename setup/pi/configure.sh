@@ -303,8 +303,6 @@ function install_tesla_ble_packages () {
   local install_path="$1"
   local binary_dir=/tmp/binarydir
 
-  apt install -y bluetooth
-
   umount "$binary_dir" &> /dev/null || true
   rm -rf "$binary_dir"
   mkdir -p "$binary_dir"
