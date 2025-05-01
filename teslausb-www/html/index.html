@@ -1412,14 +1412,44 @@ function setbuttonsdisabled(group, disabled) {
 
 function pairBLEkey() {
   var msg=document.getElementById('pairtext');
-  msg.textContent="Pairing BLE with car. Tap keycard on center console to confirm.";
+  msg.textContent="Initiating pairing request";
   var button=document.getElementById('pairKey');
   button.disabled=true;
   button.textContent="Pairing...";
   setbuttonsdisabled('group1', true);
   setbuttonsdisabled('group2', true);
-  callcgi('cgi-bin/pairBLEkey.sh');
-  setTimeout(function() { waitforpairing(button, 0); }, 5000);
+
+  var request = new XMLHttpRequest();
+  request.open('GET', cachebustingurl('cgi-bin/pairBLEkey.sh'));
+  request.setRequestHeader("Cache-Control", "no-cache, no-store, max-age=0");
+  request.onreadystatechange = function () {
+    log('readstatechange, state: ' + request.readyState + ', status: ' + request.status);
+    if (request.readyState === 4) {
+      let result = request.responseText;
+
+      if (request.status >= 200 && request.status < 300) {
+        msg.textContent = "Pairing started. Tap keycard on center console to confirm.";
+        setTimeout(function () { waitforpairing(button, 0); }, 5000);
+      } else {
+        log("pairing failed");
+        const pattern = /<p>(.*?)<\/p>/gs;
+
+        let matches = result.match(pattern);
+        if (matches && matches.length > 0) {
+          msg.textContent = matches[0].replace(/<\/?p>/g, "");
+        } else {
+          msg.textContent = "Pairing failed. Please try again.";
+        }
+        button.disabled = false;
+        button.textContent = "Pair BLE with Car";
+        setbuttonsdisabled('group1', false);
+        setbuttonsdisabled('group2', false);
+     }
+
+    }
+  }
+  request.send();
+
 }
 
 function waitforpairing(button, count) {
