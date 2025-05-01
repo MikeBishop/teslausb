@@ -255,9 +255,9 @@ export CAM_SIZE=40G
 #
 # The most direct method is to use Tesla's new BLE interface to pair TeslaUSB as
 # a BLE key to your vehicle. This allows TeslaUSB to turn Sentry Mode on before
-# archiving and off afterwards. This is known to work on Raspberry Pi 4, but
-# currently does not work on the Pi Zero W. For other platforms, please test and
-# this compatibility note can be updated.
+# archiving and off afterwards. This is known to work on Raspberry Pi 4 and Pi
+# Zero 2 W, but currently does not work on the Pi Zero W. For other platforms,
+# please test and this compatibility note can be updated.
 #
 # All methods of remotely controlling the car have security implications. The
 # keys and/or tokens stored on TeslaUSB could be used to unlock and drive your
@@ -284,6 +284,7 @@ export CAM_SIZE=40G
 #
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Tesla BLE setup: Provide the VIN of the vehicle to control here.
+# NOTE: Capital letters only!
 # export TESLA_BLE_VIN=
 #
 # After setup is complete, place TeslaUSB in/near the vehicle and use the
