@@ -1436,7 +1436,11 @@ function pairBLEkey() {
 
         let matches = result.match(pattern);
         if (matches && matches.length > 0) {
-          msg.textContent = matches[0].replace(/<\/?p>/g, "");
+          let errorString = matches[0].replace(/<\/?p>/g, "");
+          if (errorString.includes("maximum number of BLE devices")) {
+            msg.textContent = "Too many BLE devices active; turn off Bluetooth on nearby phone keys and try again.";
+          } else
+            msg.textContent = errorString;
         } else {
           msg.textContent = "Pairing failed. Please try again.";
         }
