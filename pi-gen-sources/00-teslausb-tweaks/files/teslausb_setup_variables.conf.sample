@@ -284,7 +284,6 @@ export CAM_SIZE=40G
 #
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Tesla BLE setup: Provide the VIN of the vehicle to control here.
-# NOTE: Capital letters only!
 # export TESLA_BLE_VIN=
 #
 # After setup is complete, place TeslaUSB in/near the vehicle and use the

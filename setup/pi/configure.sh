@@ -224,7 +224,7 @@ function check_and_configure_tesla_ble () {
   local install_path="$1"
   if [[ ( -n "${TESLA_BLE_VIN:+x}" ) ]]
   then
-    log_progress "Tesla BLE enabled for VIN ${TESLA_BLE_VIN}."
+    log_progress "Tesla BLE enabled for VIN ${TESLA_BLE_VIN^^}."
     install_tesla_ble_packages "$install_path"
 
     local pairing_needed=true
@@ -235,8 +235,8 @@ function check_and_configure_tesla_ble () {
       chmod 600 /root/.ble/key_private.pem
       chmod 644 /root/.ble/key_public.pem
       log_progress "Generated keys for Tesla BLE interface."
-    elif "$install_path/tesla-control" -ble -vin "$TESLA_BLE_VIN" body-controller-state; then
-      if "$install_path/tesla-control" -ble -vin "$TESLA_BLE_VIN" session-info /root/.ble/key_private.pem infotainment; then
+    elif "$install_path/tesla-control" -ble -vin "${TESLA_BLE_VIN^^}" body-controller-state; then
+      if "$install_path/tesla-control" -ble -vin "${TESLA_BLE_VIN^^}" session-info /root/.ble/key_private.pem infotainment; then
         log_progress "Tesla BLE keys exist and are paired."
         pairing_needed=false
       else
